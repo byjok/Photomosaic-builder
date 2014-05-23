@@ -1,29 +1,28 @@
 __author__ = 'apopov'
 import math
-from PIL import Image, ImageDraw
-import os
+from PIL import Image
 
-def Image_Dominant_Finder(name):
 
-    f = open('database.txt', 'a')
-    sumR = 0
-    sumG = 0
-    sumB = 0
-    image = Image.open(name)  #Открываем изображение.
-    width = image.size[0]  #Определяем ширину.
-    height = image.size[1]  #Определяем высоту.
-    pix = image.load()  #Выгружаем значения пикселей.
+class Image_solver:
+    def image_dominant_finder(name):
 
-    for i in range(width):
-        for j in range(height):
-            sumR += pix[i, j][0]
-            sumG += pix[i, j][1]
-            sumB += pix[i, j][2]
+        sumR = 0
+        sumG = 0
+        sumB = 0
+        image = Image.open(name)  #Открываем изображение.
+        width = image.size[0]  #Определяем ширину.
+        height = image.size[1]  #Определяем высоту.
+        pix = image.load()  #Выгружаем значения пикселей.
 
-    f.write(name + ' ' + str(math.ceil(sumR/(width*height))) + ' ' + str(math.ceil(sumG/(width*height))) + ' ' + str(math.ceil(sumB/(width*height))) + '\n')
-    f.close()
+        for i in range(width):
+            for j in range(height):
+                sumR += pix[i, j][0]
+                sumG += pix[i, j][1]
+                sumB += pix[i, j][2]
 
-files = os.listdir()
-images = filter(lambda x: x.endswith('.jpg'), files)
-for i in images:
-    Image_Dominant_Finder(i)
+        return math.ceil(sumR/(width*height)), math.ceil(sumG/(width*height)),math.ceil(sumB/(width*height))
+
+    def Write_to_database(name):
+        f = open('database.txt', 'a')
+        f.write(name + ' ' +str(Image_solver.image_dominant_finder(name))+ '\n')
+        f.close()
